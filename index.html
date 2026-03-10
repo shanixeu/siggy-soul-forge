@@ -1026,12 +1026,11 @@ const res = await fetch('https://siggy-proxy.shanixand.workers.dev', {
     const data = await res.json();
     hideTyping();
 
-    const raw = data.content?.map(c => c.text||'').join('') || 'mrrrow... *static* ฅ^•ﻌ•^ฅ';
-    const { mood, text: replyText } = parseMood(raw);
-
-    conversationHistory.push({role:'assistant', content: raw});
-    appendMsg('siggy', replyText, mood);
-    updateMoodBadge(mood);
+    const raw = data.content?.[0]?.text || '';
+const { mood, text: replyText } = parseMood(raw);
+conversationHistory.push({role:'assistant', content: raw});
+appendMsg('siggy', replyText, mood);
+updateMoodBadge(mood);
 
     // particle burst on receive
     const area = document.getElementById('messagesArea');
