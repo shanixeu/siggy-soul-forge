@@ -671,7 +671,7 @@ function animateP() {
   particles.forEach(p => {
     p.x += p.vx; p.y += p.vy; p.vy += .05; p.life -= p.decay;
     pCtx.beginPath();
-    pCtx.arc(p.x, p.y, p.r * p.life, 0, Math.PI*2);
+    pCtx.arc(p.x, p.y, Math.max(0, p.r * p.life), 0, Math.PI*2);
     pCtx.fillStyle = p.color;
     pCtx.globalAlpha = p.life;
     pCtx.fill();
