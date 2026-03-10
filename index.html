@@ -47,43 +47,132 @@
   /* ══════════════════════════════════
      SCREEN 1 – PET THE CAT
   ══════════════════════════════════ */
-<script>
-
-let petCount = 0
-const cat = document.getElementById("catWrap")
-const btn = document.getElementById("proceedBtn")
-
-cat.addEventListener("click", () => {
-
-  if(petCount >= 5) return
-
-  petCount++
-
-  cat.className = "cat-wrap pet-" + petCount
-
-  document.getElementById("paw"+petCount).classList.add("filled")
-
-  const heart = document.createElement("div")
-  heart.className = "heart-burst"
-  heart.innerHTML = "❤️"
-
-  cat.appendChild(heart)
-
-  setTimeout(()=>{
-    heart.remove()
-  },800)
-
-  if(petCount === 5){
-
-    cat.classList.add("pet-done")
-
-    btn.classList.add("show")
-
+  #screen-pet {
+    background: radial-gradient(ellipse at 50% 60%, #2d0a5e88 0%, transparent 70%);
   }
 
-})
+  .title-text {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: clamp(1.1rem, 3vw, 1.8rem);
+    color: var(--pink);
+    text-shadow: var(--glow);
+    letter-spacing: .15em;
+    margin-bottom: 6px;
+    text-align: center;
+  }
+  .subtitle-text {
+    font-size: .9rem;
+    color: var(--accent);
+    letter-spacing: .1em;
+    margin-bottom: 28px;
+    text-align: center;
+  }
 
-</script>
+  /* CAT SVG CONTAINER */
+  .cat-wrap {
+    position: relative;
+    width: 200px; height: 220px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .cat-body {
+    position: absolute; inset: 0;
+    transition: transform .15s ease;
+  }
+
+  /* petting animation states */
+  .cat-wrap.pet-1 .cat-body { transform: rotate(-8deg) translateY(-6px) scaleX(.96); }
+  .cat-wrap.pet-2 .cat-body { transform: rotate(6deg) translateY(-10px) scaleX(1.04); }
+  .cat-wrap.pet-3 .cat-body { transform: rotate(-5deg) translateY(-4px) scaleX(.97); }
+  .cat-wrap.pet-4 .cat-body { transform: rotate(4deg) translateY(-8px) scaleX(1.03); }
+  .cat-wrap.pet-5 .cat-body { transform: rotate(0deg) translateY(0px) scaleX(1) scale(1.05); }
+  .cat-wrap.pet-done .cat-body { transform: scale(1.07) translateY(-4px); animation: floatDone 2s ease-in-out infinite; }
+
+  @keyframes floatDone {
+    0%,100% { transform: scale(1.07) translateY(-4px); }
+    50% { transform: scale(1.07) translateY(-12px); }
+  }
+
+  /* idle float */
+  .cat-body { animation: idleFloat 3s ease-in-out infinite; }
+  .cat-wrap.pet-1 .cat-body,
+  .cat-wrap.pet-2 .cat-body,
+  .cat-wrap.pet-3 .cat-body,
+  .cat-wrap.pet-4 .cat-body,
+  .cat-wrap.pet-5 .cat-body { animation: none; }
+
+  @keyframes idleFloat {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  /* glow aura ring */
+  .aura {
+    position: absolute; inset: -20px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #7c3aed44 0%, transparent 70%);
+    animation: auraPulse 2.5s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes auraPulse {
+    0%,100% { opacity: .5; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.08); }
+  }
+
+  /* hearts that fly on pet */
+  .heart-burst {
+    position: absolute; top: 30px; left: 50%;
+    font-size: 1.4rem; pointer-events: none;
+    animation: heartFly .8s ease-out forwards;
+    opacity: 0;
+    transform: translateX(-50%);
+  }
+  @keyframes heartFly {
+    0% { opacity: 1; transform: translateX(-50%) translateY(0) scale(.6); }
+    100% { opacity: 0; transform: translateX(-50%) translateY(-60px) scale(1.3); }
+  }
+
+  .pet-counter {
+    margin-top: 18px;
+    display: flex; gap: 10px;
+  }
+  .paw-dot {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--purple2);
+    border: 2px solid var(--accent);
+    transition: background .3s, transform .3s;
+  }
+  .paw-dot.filled { background: var(--pink); transform: scale(1.2); box-shadow: 0 0 8px var(--pink); }
+
+  .pet-hint {
+    margin-top: 12px;
+    font-size: .85rem;
+    color: var(--accent);
+    opacity: .8;
+    text-align: center;
+  }
+
+  .proceed-btn {
+    margin-top: 22px;
+    padding: 12px 36px;
+    background: linear-gradient(135deg, var(--purple2), #6d28d9);
+    border: 2px solid var(--accent);
+    border-radius: 50px;
+    color: var(--white);
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: .08em;
+    box-shadow: var(--glow);
+    transition: transform .2s, box-shadow .2s;
+    display: none;
+  }
+  .proceed-btn:hover { transform: scale(1.06); box-shadow: 0 0 30px #c084fcaa; }
+  .proceed-btn.show { display: block; animation: fadeUp .5s ease; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
   /* ══════════════════════════════════
      SCREEN 2 – REGISTER
@@ -979,47 +1068,6 @@ updateMoodBadge(mood);
     appendMsg('siggy', 'mrrrow... my magic is glitching!! try again~~ (╯°□°）╯', 'annoyed');
   }
 }
-</script>
- <div class="footer">
-  made with cosmic energy
-</div>
-
-<script>
-
-let petCount = 0
-const cat = document.getElementById("catWrap")
-const btn = document.getElementById("proceedBtn")
-
-cat.addEventListener("click", () => {
-
-  if(petCount >= 5) return
-
-  petCount++
-
-  cat.className = "cat-wrap pet-" + petCount
-
-  document.getElementById("paw"+petCount).classList.add("filled")
-
-  const heart = document.createElement("div")
-  heart.className = "heart-burst"
-  heart.innerHTML = "❤️"
-
-  cat.appendChild(heart)
-
-  setTimeout(()=>{
-    heart.remove()
-  },800)
-
-  if(petCount === 5){
-
-    cat.classList.add("pet-done")
-
-    btn.classList.add("show")
-
-  }
-
-})
-
 </script>
 </body>
 </html>
